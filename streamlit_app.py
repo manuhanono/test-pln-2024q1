@@ -62,11 +62,11 @@ st.title("Sistema de Recomendación de Medicamentos")
 condition_options = df['Condition'].unique().tolist()
 condition = st.selectbox("Seleccione la condición", options=condition_options)
 
-# Campo de texto para escribir la condición
-condition_text = st.text_input("O escriba su condición", value="")
+# # Campo de texto para escribir la condición
+# condition_text = st.text_input("O escriba su condición", value="")
 
-if condition_text:
-    condition = condition_text
+# if condition_text:
+#     condition = condition_text
 
 # Dropdown para seleccionar el rango de edad
 age_range_options = df['Age'].unique().tolist()
