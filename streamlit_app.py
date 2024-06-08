@@ -24,7 +24,6 @@ def agregar_datos(df_filtrado):
     #side_effects = df_filtrado.iloc[:, 15:].sum().sort_values(ascending=False).head(20)
     side_effects = df_filtrado.iloc[:, 15:].apply(pd.to_numeric, errors='coerce').sum().sort_values(ascending=False).head(20)
 
-
     return agregados, side_effects
 
 # Función para recomendar medicamentos
@@ -57,34 +56,38 @@ def recomendar_medicamentos(df, condition, age_range, sex):
 
     return recomendados, result_df
 
+# Suponiendo que tienes una función llamada recomendar_medicamentos
+# y un DataFrame df ya definido.
+
 # Interfaz de usuario con Streamlit
-st.title("Sistema de Recomendación de Medicamentos")
+st.title("💊 Sistema de Recomendación de Medicamentos")
+
+# Emojis para cada sección
+st.markdown("### 🩺 Seleccione su Condición")
 
 # Dropdown para seleccionar la condición
 condition_options = df['Condition'].unique().tolist()
 condition = st.selectbox("Seleccione la condición", options=condition_options)
 
-# # Campo de texto para escribir la condición
-# condition_text = st.text_input("O escriba su condición", value="")
-
-# if condition_text:
-#     condition = condition_text
+st.markdown("### 🎂 Seleccione su Rango de Edad")
 
 # Dropdown para seleccionar el rango de edad
 age_range_options = df['Age'].astype(str).unique().tolist()
-
 age_range = st.selectbox("Seleccione el rango de edad", options=age_range_options)
+
+st.markdown("### 🚻 Seleccione su Sexo")
 
 # Dropdown para seleccionar el sexo
 sex_options = df['Sex'].unique().tolist()
 sex = st.selectbox("Seleccione el sexo", options=sex_options)
 
 # Botón para ejecutar la recomendación
-if st.button("Recomendar Medicamentos"):
+if st.button("🔍 Recomendar Medicamentos"):
     recomendados, tabla_efectos_secundarios = recomendar_medicamentos(df, condition, age_range, sex)
 
-    st.subheader("Recomendaciones de Medicamentos")
+    st.markdown("## 💊 Recomendaciones de Medicamentos")
     st.dataframe(recomendados)
 
-    st.subheader("Tabla de Recomendaciones con Efectos Secundarios")
+    st.markdown("## 📊 Tabla de Recomendaciones con Efectos Secundarios")
     st.dataframe(tabla_efectos_secundarios)
+
