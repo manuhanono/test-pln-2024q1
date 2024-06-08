@@ -21,7 +21,9 @@ def agregar_datos(df_filtrado):
         'Satisfaction': 'mean'
     }).reset_index()
 
-    side_effects = df_filtrado.iloc[:, 15:].sum().sort_values(ascending=False).head(20)
+    #side_effects = df_filtrado.iloc[:, 15:].sum().sort_values(ascending=False).head(20)
+    side_effects = df_filtrado.iloc[:, 15:].apply(pd.to_numeric, errors='coerce').sum().sort_values(ascending=False).head(20)
+
 
     return agregados, side_effects
 
