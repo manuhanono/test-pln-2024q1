@@ -69,7 +69,7 @@ st.markdown("### 🩺 Seleccione su Condición")
 condition_options = df['Condition'].unique().tolist()
 condition = st.selectbox("Seleccione la condición", options=condition_options)
 
-st.markdown("### 🎂 Seleccione su Rango de Edad")
+st.markdown("### Seleccione su Rango de Edad")
 
 # Dropdown para seleccionar el rango de edad
 age_range_options = df['Age'].astype(str).unique().tolist()
