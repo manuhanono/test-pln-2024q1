@@ -71,7 +71,8 @@ condition = st.selectbox("Seleccione la condición", options=condition_options)
 #     condition = condition_text
 
 # Dropdown para seleccionar el rango de edad
-age_range_options = df['Age'].unique().tolist()
+age_range_options = df['Age'].astype(str).unique().tolist()
+
 age_range = st.selectbox("Seleccione el rango de edad", options=age_range_options)
 
 # Dropdown para seleccionar el sexo
