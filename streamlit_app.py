@@ -67,8 +67,8 @@ def recomendar_medicamentos(df, condition, age_range, sex):
         drug_row = pd.Series([drug_name] + [f"{round(value, 1)}%" for value in drug_side_effects.tolist()], index=['Drug'] + drug_side_effects.columns.tolist())
         result_list.append(drug_row)
 
-# Crear DataFrame con las recomendaciones de medicamentos y efectos secundarios
-result_df = pd.DataFrame(result_list)
+    # Crear DataFrame con las recomendaciones de medicamentos y efectos secundarios
+    result_df = pd.DataFrame(result_list)
 
     return recomendados, result_df
 
