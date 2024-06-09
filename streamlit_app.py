@@ -1,10 +1,13 @@
-import altair as alt
-import numpy as np
-import pandas as pd
 import streamlit as st
+import pandas as pd
 
-df = 'df_sentiment.csv'
-df = pd.read_csv(df)
+# Cargar el DataFrame
+df = pd.read_csv('df_sentiment.csv')
+
+# Función para convertir valores numéricos a estrellas
+def convert_to_stars(value, max_stars=5):
+    stars = '⭐' * int(value)
+    return stars
 
 # Función para filtrar los datos
 def filtrar_datos(df, condition, age_range, sex):
@@ -21,7 +24,6 @@ def agregar_datos(df_filtrado):
         'Satisfaction': 'mean'
     }).reset_index()
 
-    #side_effects = df_filtrado.iloc[:, 15:].sum().sort_values(ascending=False).head(20)
     side_effects = df_filtrado.iloc[:, 15:].apply(pd.to_numeric, errors='coerce').sum().sort_values(ascending=False).head(20)
 
     return agregados, side_effects
@@ -37,9 +39,12 @@ def recomendar_medicamentos(df, condition, age_range, sex):
     # Ordenar los medicamentos por 'sentiment_score', 'Effectiveness' y 'Satisfaction'
     recomendados = agregados.sort_values(by=['sentiment_score', 'Effectiveness', 'Satisfaction'], ascending=False)
 
+    # Convertir valores de 'Satisfaction' y 'Effectiveness' a estrellas
+    recomendados['Satisfaction'] = recomendados['Satisfaction'].apply(convert_to_stars)
+    recomendados['Effectiveness'] = recomendados['Effectiveness'].apply(convert_to_stars)
+
     # Crear un DataFrame para la tabla de recomendaciones con efectos secundarios
     result_list = []
-
     efectos_secundarios_indices = efectos_secundarios.index.tolist()
 
     for _, row in recomendados.iterrows():
@@ -55,9 +60,6 @@ def recomendar_medicamentos(df, condition, age_range, sex):
     result_df = pd.DataFrame(result_list)
 
     return recomendados, result_df
-
-# Suponiendo que tienes una función llamada recomendar_medicamentos
-# y un DataFrame df ya definido.
 
 # Interfaz de usuario con Streamlit
 st.title("💊 Sistema de Recomendación de Medicamentos")
@@ -92,8 +94,7 @@ if st.button("🔍 Recomendar Medicamentos"):
     recomendados, tabla_efectos_secundarios = recomendar_medicamentos(df, condition, age_range, sex)
 
     st.markdown("## 💊 Recomendaciones de Medicamentos")
-    st.dataframe(recomendados)
+    st.markdown(recomendados.to_html(escape=False, index=False), unsafe_allow_html=True)
 
     st.markdown("## 📊 Tabla de Recomendaciones con Efectos Secundarios")
     st.dataframe(tabla_efectos_secundarios)
-
