@@ -55,14 +55,14 @@ def recomendar_medicamentos(df, condition, age_range, sex):
         drug_side_effects = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:].apply(pd.to_numeric, errors='coerce').gt(0).sum() / len(df_filtrado) * 100
 
         # Filtrar columnas con valores mayores a 0
-        drug_side_effects = drug_side_effects[drug_side_effects > 0.9]
+        drug_side_effects = drug_side_effects[drug_side_effects > 0]
+
+        # Comprobar si todas las columnas tienen 0% en todas sus filas
+        if all(drug_side_effects == 0):
+            continue
 
         # Asegurarse de que las longitudes coincidan
         drug_side_effects = drug_side_effects.reindex(efectos_secundarios_indices, fill_value=0)
-
-        # Omitir la primera columna de efectos secundarios si es 0%
-        if drug_side_effects.iloc[0] == 0:
-            drug_side_effects = drug_side_effects[1:]
 
         # Omitir las columnas duplicadas
         drug_side_effects = drug_side_effects[~drug_side_effects.index.duplicated()]
