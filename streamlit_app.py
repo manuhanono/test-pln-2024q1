@@ -99,7 +99,7 @@ filtered_df = filtered_df[filtered_df['Sex'] == sex]
 st.markdown("### Seleccione su Rango de Edad")
 
 # Dropdown para seleccionar el rango de edad basado en la condición y el sexo seleccionados
-age_range_options = filtered_df['Age'].dropna().astype(str).unique().tolist()
+age_range_options = filtered_df['Age'].dropna().apply(str).unique().tolist()
 age_range = st.selectbox("Seleccione el rango de edad", options=age_range_options)
 
 # Botón para ejecutar la recomendación
