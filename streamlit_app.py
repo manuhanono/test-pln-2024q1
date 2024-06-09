@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import math
+
 
 # Cargar el DataFrame
 df = pd.read_csv('df_sentiment.csv')
