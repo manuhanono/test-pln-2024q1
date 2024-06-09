@@ -40,6 +40,7 @@ def recomendar_medicamentos(df, condition, age_range, sex):
     recomendados = agregados.sort_values(by=['sentiment_score', 'Effectiveness', 'Satisfaction'], ascending=False)
 
     # Convertir valores de 'Satisfaction' y 'Effectiveness' a estrellas
+    recomendados['sentiment_score'] = recomendados['sentiment_score'].apply(convert_to_stars)
     recomendados['Satisfaction'] = recomendados['Satisfaction'].apply(convert_to_stars)
     recomendados['Effectiveness'] = recomendados['Effectiveness'].apply(convert_to_stars)
 
