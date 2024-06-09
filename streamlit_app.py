@@ -52,18 +52,25 @@ def recomendar_medicamentos(df, condition, age_range, sex):
 
     for _, row in recomendados.iterrows():
         drug_name = row['Drug']
-        drug_side_effects = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:20].apply(pd.to_numeric, errors='coerce').gt(0).sum() / len(df_filtrado) * 100
+        drug_data = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:].apply(pd.to_numeric, errors='coerce').gt(0)
+
+        # Calcular el porcentaje de aparición de efectos secundarios
+        drug_side_effects = drug_data.sum() / len(df_filtrado) * 100
 
         # Asegurarse de que las longitudes coincidan
         drug_side_effects = drug_side_effects.reindex(efectos_secundarios_indices, fill_value="")
 
-        # Omitir la primera columna de efectos secundarios
-        drug_row = pd.Series([drug_name] + [f"{round(value, 1)}%" for value in drug_side_effects.tolist()[1:]], index=['Drug'] + efectos_secundarios_indices[:5])
+        # Seleccionar las primeras cinco columnas de efectos secundarios
+        drug_side_effects = drug_side_effects[:5]
+
+        # Construir la fila del DataFrame de resultados
+        drug_row = pd.Series([drug_name] + [f"{round(value, 1)}%" for value in drug_side_effects], index=['Drug'] + efectos_secundarios_indices[:5])
         result_list.append(drug_row)
 
     result_df = pd.DataFrame(result_list)
 
     return recomendados, result_df
+
 
 # Interfaz de usuario con Streamlit
 st.title("💊 Sistema de Recomendación de Medicamentos")
