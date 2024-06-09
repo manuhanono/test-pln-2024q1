@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Cargar el DataFrame
-df = pd.read_csv('df_sentiment.csv')
+df = pd.read_csv('original_with_predictions.csv')
 
 # Función para convertir valores numéricos a estrellas
 def convert_to_stars(value, max_stars=5):
@@ -26,7 +26,7 @@ def agregar_datos(df_filtrado):
     }).reset_index()
 
     total_count = len(df_filtrado)
-    side_effects_percentage = (df_filtrado.iloc[:, 15:].apply(pd.to_numeric, errors='coerce').gt(0).sum() / total_count * 100).sort_values(ascending=False).head(20)
+    side_effects_percentage = (df_filtrado.iloc[:, 16:].apply(pd.to_numeric, errors='coerce').gt(0).sum() / total_count * 100).sort_values(ascending=False).head(20)
 
     return agregados, side_effects_percentage
 
@@ -39,10 +39,10 @@ def recomendar_medicamentos(df, condition, age_range, sex):
     agregados, efectos_secundarios = agregar_datos(df_filtrado)
 
     # Ordenar los medicamentos por 'sentiment_score', 'Effectiveness' y 'Satisfaction'
-    recomendados = agregados.sort_values(by=['sentiment_score', 'Effectiveness', 'Satisfaction'], ascending=False)
+    recomendados = agregados.sort_values(by=['Predicted', 'Effectiveness', 'Satisfaction'], ascending=False)
 
     # Convertir valores de 'sentiment_score', 'Satisfaction' y 'Effectiveness' a estrellas
-    recomendados['sentiment_score'] = recomendados['sentiment_score'].apply(convert_to_stars)
+    recomendados['Predicted'] = recomendados['Predicted'].apply(convert_to_stars)
     recomendados['Satisfaction'] = recomendados['Satisfaction'].apply(convert_to_stars)
     recomendados['Effectiveness'] = recomendados['Effectiveness'].apply(convert_to_stars)
 
@@ -54,7 +54,7 @@ def recomendar_medicamentos(df, condition, age_range, sex):
         drug_name = row['Drug']
         drug_data = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:].apply(pd.to_numeric, errors='coerce').gt(0)
 
-        drug_data.drop(columns=['sentiment_score'], inplace=True)
+        drug_data.drop(columns=['Predicted'], inplace=True)
 
         # Calcular el porcentaje de aparición de efectos secundarios
         drug_side_effects = drug_data.sum() / len(df_filtrado) * 100
