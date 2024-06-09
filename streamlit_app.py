@@ -65,20 +65,39 @@ st.title("💊 Sistema de Recomendación de Medicamentos")
 # Emojis para cada sección
 st.markdown("### 🩺 Seleccione su Condición")
 
+# # Dropdown para seleccionar la condición
+# condition_options = df['Condition'].unique().tolist()
+# condition = st.selectbox("Seleccione la condición", options=condition_options)
+
+# st.markdown("### Seleccione su Rango de Edad")
+
+# # Dropdown para seleccionar el rango de edad
+# age_range_options = df['Age'].astype(str).unique().tolist()
+# age_range = st.selectbox("Seleccione el rango de edad", options=age_range_options)
+
+# st.markdown("### 🚻 Seleccione su Sexo")
+
+# # Dropdown para seleccionar el sexo
+# sex_options = df['Sex'].unique().tolist()
+# sex = st.selectbox("Seleccione el sexo", options=sex_options)
+
 # Dropdown para seleccionar la condición
 condition_options = df['Condition'].unique().tolist()
 condition = st.selectbox("Seleccione la condición", options=condition_options)
 
 st.markdown("### Seleccione su Rango de Edad")
 
-# Dropdown para seleccionar el rango de edad
-age_range_options = df['Age'].astype(str).unique().tolist()
+# Filtrar DataFrame basado en la condición seleccionada
+filtered_df = df[df['Condition'] == condition]
+
+# Dropdown para seleccionar el rango de edad basado en la condición seleccionada
+age_range_options = filtered_df['Age'].astype(str).unique().tolist()
 age_range = st.selectbox("Seleccione el rango de edad", options=age_range_options)
 
 st.markdown("### 🚻 Seleccione su Sexo")
 
-# Dropdown para seleccionar el sexo
-sex_options = df['Sex'].unique().tolist()
+# Dropdown para seleccionar el sexo basado en la condición seleccionada
+sex_options = filtered_df['Sex'].unique().tolist()
 sex = st.selectbox("Seleccione el sexo", options=sex_options)
 
 # Botón para ejecutar la recomendación
