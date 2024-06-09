@@ -51,28 +51,24 @@ def recomendar_medicamentos(df, condition, age_range, sex):
     efectos_secundarios_indices = efectos_secundarios.index.tolist()
 
     for _, row in recomendados.iterrows():
-        drug_name = row['Drug']
-        drug_side_effects = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:].apply(pd.to_numeric, errors='coerce').gt(0).sum() / len(df_filtrado) * 100
+    drug_name = row['Drug']
+    drug_data = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:]
 
-        # Filtrar columnas con valores mayores a 0
-        drug_side_effects = drug_side_effects[drug_side_effects > 0]
+    # Filtrar columnas que tienen valores
+    drug_side_effects = drug_data.loc[:, drug_data.any()]
 
-        # Comprobar si todas las columnas tienen 0% en todas sus filas
-        if all(drug_side_effects == 0):
-            continue
+    # Asegurarse de que las longitudes coincidan
+    drug_side_effects = drug_side_effects.reindex(efectos_secundarios_indices, fill_value=0)
 
-        # Asegurarse de que las longitudes coincidan
-        drug_side_effects = drug_side_effects.reindex(efectos_secundarios_indices, fill_value=0)
+    # Omitir la columna 'sentiment_score'
+    drug_side_effects = drug_side_effects.drop(columns=['sentiment_score'], errors='ignore')
 
-        # Omitir las columnas duplicadas
-        drug_side_effects = drug_side_effects[~drug_side_effects.index.duplicated()]
+    # Convertir porcentajes a cadena con formato
+    drug_row = pd.Series([drug_name] + [f"{round(value, 1)}%" for value in drug_side_effects.tolist()], index=['Drug'] + drug_side_effects.columns.tolist())
+    result_list.append(drug_row)
 
-        # Convertir porcentajes a cadena con formato
-        drug_row = pd.Series([drug_name] + [f"{round(value, 1)}%" for value in drug_side_effects.tolist()], index=['Drug'] + drug_side_effects.index.tolist())
-        result_list.append(drug_row)
-
-    # Crear DataFrame con las recomendaciones de medicamentos y efectos secundarios
-    result_df = pd.DataFrame(result_list)
+# Crear DataFrame con las recomendaciones de medicamentos y efectos secundarios
+result_df = pd.DataFrame(result_list)
 
     return recomendados, result_df
 
