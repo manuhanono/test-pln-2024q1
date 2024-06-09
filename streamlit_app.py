@@ -66,7 +66,6 @@ def recomendar_medicamentos(df, condition, age_range, sex):
         # Asegurarse de que las longitudes coincidan
         drug_side_effects = drug_side_effects.reindex(efectos_secundarios_indices, fill_value=0)
 
-<<<<<<< HEAD
         # Omitir las columnas duplicadas
         drug_side_effects = drug_side_effects[~drug_side_effects.index.duplicated()]
 
@@ -79,10 +78,6 @@ def recomendar_medicamentos(df, condition, age_range, sex):
 
         # Convertir porcentajes a cadena con formato
         drug_row = pd.Series([drug_name] + [f"{round(value, 1)}% ({value})" for value in drug_side_effects.tolist()], index=['Drug'] + efectos_secundarios_indices)
-=======
-        # Omitir la primera columna de efectos secundarios
-        drug_row = pd.Series([drug_name] + [f"{round(value, 1)}%" for value in drug_side_effects.tolist()[1:]], index=['Drug'] + efectos_secundarios_indices[1:])
->>>>>>> 54a91403afa2f36da0d4f7c10b02c92e28bc49d2
         result_list.append(drug_row)
 
     result_df = pd.DataFrame(result_list)
