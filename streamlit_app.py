@@ -102,8 +102,4 @@ if st.button("🔍 Recomendar Medicamentos"):
 
     st.markdown("## 📊 Tabla de Recomendaciones con Efectos Secundarios")
 
-    # Centralizar los títulos de las columnas
-    tabla_efectos_secundarios.columns = [f'<center>{col}</center>' for col in tabla_efectos_secundarios.columns]
-
-    # Mostrar la tabla
-    st.dataframe(tabla_efectos_secundarios, height=500)
+    st.markdown(tabla_efectos_secundarios.to_html(escape=False, index=False), unsafe_allow_html=True)
