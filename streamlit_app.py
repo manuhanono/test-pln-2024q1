@@ -99,7 +99,7 @@ filtered_df = filtered_df[filtered_df['Sex'] == sex]
 st.markdown("### Seleccione su Rango de Edad")
 
 # Reemplazar el carácter '-' por 'to' en los rangos de edad
-filtered_df['Age'] = filtered_df['Age'].astype(str).str.replace('-', ' to ').dropna()
+filtered_df['Age'] = filtered_df['Age'].astype(str).str.dropna().replace('-', ' to ')
 filtered_df['Age'] = filtered_df['Age'].astype(str).str.replace('Mar', '3').str.replace('Jul', '7').dropna()
 
 age_range_options = filtered_df['Age'].unique().tolist()
