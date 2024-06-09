@@ -26,7 +26,10 @@ def agregar_datos(df_filtrado):
     }).reset_index()
 
     total_count = len(df_filtrado)
-    side_effects_percentage = (df_filtrado.iloc[:, 15:].apply(pd.to_numeric, errors='coerce').gt(0).sum() / total_count * 100).sort_values(ascending=False).head(20)
+    side_effects_percentage = (df_filtrado.iloc[:, 15:].apply(pd.to_numeric, errors='coerce').gt(0).sum() / total_count * 100).sort_values(ascending=False)
+
+    # Filtrar las columnas donde el porcentaje es mayor que 0%
+    side_effects_percentage = side_effects_percentage[side_effects_percentage > 0]
 
     return agregados, side_effects_percentage
 
@@ -41,6 +44,9 @@ def recomendar_medicamentos(df, condition, age_range, sex):
     # Ordenar los medicamentos por 'sentiment_score', 'Effectiveness' y 'Satisfaction'
     recomendados = agregados.sort_values(by=['sentiment_score', 'Effectiveness', 'Satisfaction'], ascending=False)
 
+    # Agregar contador de drogas
+    recomendados['Drug Count'] = df_filtrado.groupby('Drug').size().reset_index(name='Count')['Count']
+
     # Convertir valores de 'sentiment_score', 'Satisfaction' y 'Effectiveness' a estrellas
     recomendados['sentiment_score'] = recomendados['sentiment_score'].apply(convert_to_stars)
     recomendados['Satisfaction'] = recomendados['Satisfaction'].apply(convert_to_stars)
@@ -54,11 +60,29 @@ def recomendar_medicamentos(df, condition, age_range, sex):
         drug_name = row['Drug']
         drug_side_effects = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:].apply(pd.to_numeric, errors='coerce').gt(0).sum() / len(df_filtrado) * 100
 
+        # Filtrar las columnas donde el porcentaje es mayor que 0%
+        drug_side_effects = drug_side_effects[drug_side_effects > 0]
+
         # Asegurarse de que las longitudes coincidan
         drug_side_effects = drug_side_effects.reindex(efectos_secundarios_indices, fill_value=0)
 
+<<<<<<< HEAD
+        # Omitir las columnas duplicadas
+        drug_side_effects = drug_side_effects[~drug_side_effects.index.duplicated()]
+
+        # Omitir la primera columna de efectos secundarios si es 0%
+        if drug_side_effects.iloc[0] == 0:
+            drug_side_effects = drug_side_effects[1:]
+
+        # Omitir las columnas donde el porcentaje es 0%
+        drug_side_effects = drug_side_effects[drug_side_effects > 0]
+
+        # Convertir porcentajes a cadena con formato
+        drug_row = pd.Series([drug_name] + [f"{round(value, 1)}% ({value})" for value in drug_side_effects.tolist()], index=['Drug'] + efectos_secundarios_indices)
+=======
         # Omitir la primera columna de efectos secundarios
         drug_row = pd.Series([drug_name] + [f"{round(value, 1)}%" for value in drug_side_effects.tolist()[1:]], index=['Drug'] + efectos_secundarios_indices[1:])
+>>>>>>> 54a91403afa2f36da0d4f7c10b02c92e28bc49d2
         result_list.append(drug_row)
 
     result_df = pd.DataFrame(result_list)
@@ -101,4 +125,13 @@ if st.button("🔍 Recomendar Medicamentos"):
     st.markdown(recomendados.to_html(escape=False, index=False), unsafe_allow_html=True)
 
     st.markdown("## 📊 Tabla de Recomendaciones con Efectos Secundarios")
-    st.dataframe(tabla_efectos_secundarios)
+
+    # Obtener el orden de las drogas de la tabla de recomendados
+    drug_order = recomendados['Drug'].tolist()
+
+    # Reordenar la tabla de efectos secundarios de acuerdo al orden de drogas
+    tabla_efectos_secundarios = tabla_efectos_secundarios.set_index('Drug').reindex(drug_order).reset_index()
+
+    # Permitir al usuario modificar el orden de las columnas
+    reordered_columns = st.selectbox("Seleccione el orden de las columnas", options=tabla_efectos_secundarios.columns.tolist(), index=0)
+   
