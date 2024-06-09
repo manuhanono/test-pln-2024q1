@@ -26,7 +26,7 @@ def agregar_datos(df_filtrado):
     }).reset_index()
 
     total_count = len(df_filtrado)
-    side_effects_percentage = (df_filtrado.iloc[:, 15:].apply(pd.to_numeric, errors='coerce').sum() / total_count * 100).sort_values(ascending=False).head(20)
+    side_effects_percentage = (df_filtrado.iloc[:, 15:].apply(pd.to_numeric, errors='coerce').gt(0).sum() / total_count * 100).sort_values(ascending=False).head(20)
 
     return agregados, side_effects_percentage
 
@@ -52,7 +52,7 @@ def recomendar_medicamentos(df, condition, age_range, sex):
 
     for _, row in recomendados.iterrows():
         drug_name = row['Drug']
-        drug_side_effects = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:].sum()
+        drug_side_effects = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:].apply(pd.to_numeric, errors='coerce').gt(0).sum() / len(df_filtrado) * 100
 
         # Asegurarse de que las longitudes coincidan
         drug_side_effects = drug_side_effects.reindex(efectos_secundarios_indices, fill_value=0)
