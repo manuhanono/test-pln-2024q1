@@ -56,20 +56,18 @@ def recomendar_medicamentos(df, condition, age_range, sex):
         drug_data = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:]
 
         # Filtrar columnas que tienen valores
-        drug_side_effects = drug_data.loc[:, drug_data.any()]
+        columns_with_values = drug_data.columns[(drug_data > 0).any()]
 
-        # Asegurarse de que las longitudes coincidan
-        drug_side_effects = drug_side_effects.reindex(efectos_secundarios_indices, fill_value=0)
+        # Calcular el porcentaje de aparición de efectos secundarios
+        side_effects_percentage = (drug_data[columns_with_values].gt(0).sum() / len(drug_data) * 100).round(1)
 
-        # Omitir la columna 'sentiment_score'
-        drug_side_effects = drug_side_effects.drop(columns=['sentiment_score'], errors='ignore')
-
-        # Convertir porcentajes a cadena con formato
-        drug_row = pd.Series([drug_name] + [f"{round(value, 1)}%" for value in drug_side_effects.values[0]], index=['Drug'] + drug_side_effects.columns.tolist())
+        # Construir la fila del DataFrame de resultados
+        drug_row = pd.Series([drug_name] + [f"{value}% ({round(drug_data[column].mean(), 1)})" for column, value in side_effects_percentage.iteritems()], index=['Drug'] + side_effects_percentage.index.tolist())
         result_list.append(drug_row)
 
     # Crear DataFrame con las recomendaciones de medicamentos y efectos secundarios
     result_df = pd.DataFrame(result_list)
+
 
 
     return recomendados, result_df
