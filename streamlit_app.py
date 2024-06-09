@@ -20,7 +20,7 @@ def filtrar_datos(df, condition, age_range, sex):
 # Función para agregar los datos
 def agregar_datos(df_filtrado):
     agregados = df_filtrado.groupby('Drug').agg({
-        'sentiment_score': 'mean',
+        'Predicted': 'mean',
         'Effectiveness': 'mean',
         'Satisfaction': 'mean'
     }).reset_index()
