@@ -52,7 +52,9 @@ def recomendar_medicamentos(df, condition, age_range, sex):
 
     for _, row in recomendados.iterrows():
         drug_name = row['Drug']
-        drug_data = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 16:].apply(pd.to_numeric, errors='coerce').gt(0)
+        drug_data = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:].apply(pd.to_numeric, errors='coerce').gt(0)
+
+        drug_data.drop(columns=['sentiment_score'], inplace=True)
 
         # Calcular el porcentaje de aparición de efectos secundarios
         drug_side_effects = drug_data.sum() / len(df_filtrado) * 100
