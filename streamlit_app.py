@@ -58,7 +58,7 @@ def recomendar_medicamentos(df, condition, age_range, sex):
         drug_side_effects = drug_side_effects.reindex(efectos_secundarios_indices, fill_value=0)
 
         # Omitir la primera columna de efectos secundarios
-        drug_row = pd.Series([drug_name] + drug_side_effects.tolist()[1:], index=['Drug'] + efectos_secundarios_indices[1:])
+        drug_row = pd.Series([drug_name] + [f"{round(value, 1)}%" for value in drug_side_effects.tolist()[1:]], index=['Drug'] + efectos_secundarios_indices[1:])
         result_list.append(drug_row)
 
     result_df = pd.DataFrame(result_list)
