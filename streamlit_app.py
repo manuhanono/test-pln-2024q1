@@ -54,6 +54,9 @@ def recomendar_medicamentos(df, condition, age_range, sex):
         drug_name = row['Drug']
         drug_side_effects = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:].apply(pd.to_numeric, errors='coerce').gt(0).sum() / len(df_filtrado) * 100
 
+        drug_row = pd.Series([drug_name] + [f"{round(value, 1)}%" for value in drug_side_effects.tolist()[1:]], index=['Drug'] + efectos_secundarios_indices[1:])
+        result_list.append(drug_row)
+
     result_df = pd.DataFrame(result_list)
 
     return recomendados, result_df
