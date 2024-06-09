@@ -7,6 +7,7 @@ df = pd.read_csv('df_sentiment.csv')
 # Función para convertir valores numéricos a estrellas
 def convert_to_stars(value, max_stars=5):
     stars = '⭐' * int(value)
+    value = round(value, 2)
     return f"{stars} ({value})"
 
 # Función para filtrar los datos
