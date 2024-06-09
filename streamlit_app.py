@@ -60,6 +60,8 @@ def recomendar_medicamentos(df, condition, age_range, sex):
         # Asegurarse de que las longitudes coincidan
         drug_side_effects = drug_side_effects.reindex(efectos_secundarios_indices, fill_value="")
 
+        drug_side_effects.drop(columns=['sentiment_score'], inplace=True)   
+
         # Seleccionar las primeras cinco columnas de efectos secundarios
         drug_side_effects = drug_side_effects[:5]
 
