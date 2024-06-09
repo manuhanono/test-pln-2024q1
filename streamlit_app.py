@@ -40,6 +40,7 @@ def recomendar_medicamentos(df, condition, age_range, sex):
     recomendados = agregados.sort_values(by=['sentiment_score', 'Effectiveness', 'Satisfaction'], ascending=False)
 
     # Convertir valores de 'Satisfaction' y 'Effectiveness' a estrellas
+    recomendados['sentiment_score'] = recomendados['sentiment_score'].apply(convert_to_stars)
     recomendados['Satisfaction'] = recomendados['Satisfaction'].apply(convert_to_stars)
     recomendados['Effectiveness'] = recomendados['Effectiveness'].apply(convert_to_stars)
 
@@ -83,7 +84,7 @@ sex = st.selectbox("Seleccione el sexo", options=sex_options)
 # Filtrar DataFrame basado en la condición y el sexo seleccionados
 filtered_df = filtered_df[filtered_df['Sex'] == sex]
 
-st.markdown("### Seleccione su Rango de Edad")
+st.markdown("### 🎂 Seleccione su Rango de Edad")
 
 # Dropdown para seleccionar el rango de edad basado en la condición y el sexo seleccionados
 age_range_options = filtered_df['Age'].astype(str).unique().tolist()
