@@ -55,7 +55,10 @@ def recomendar_medicamentos(df, condition, age_range, sex):
         drug_name = row['Drug']
         drug_data = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:]
 
-        # Filtrar columnas que tienen valores
+        # Convertir las columnas a tipo numérico
+        drug_data = drug_data.apply(pd.to_numeric, errors='coerce')
+
+        # Filtrar columnas que tienen valores numéricos
         columns_with_values = drug_data.columns[(drug_data > 0).any()]
 
         # Calcular el porcentaje de aparición de efectos secundarios
@@ -67,6 +70,7 @@ def recomendar_medicamentos(df, condition, age_range, sex):
 
     # Crear DataFrame con las recomendaciones de medicamentos y efectos secundarios
     result_df = pd.DataFrame(result_list)
+
 
 
 
