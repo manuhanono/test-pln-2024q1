@@ -60,7 +60,7 @@ def recomendar_medicamentos(df, condition, age_range, sex):
         drug_side_effects = drug_data.sum() / len(df_filtrado) * 100
 
         # Asegurarse de que las longitudes coincidan
-        drug_side_effects = drug_side_effects.reindex(efectos_secundarios_indices, fill_value="")
+        drug_side_effects = drug_side_effects.reindex(efectos_secundarios_indices, fill_value=0)
 
         # Seleccionar las primeras cinco columnas de efectos secundarios
         drug_side_effects = drug_side_effects[:5]
