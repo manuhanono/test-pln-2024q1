@@ -117,7 +117,7 @@ if st.button("🔍 Recomendar Medicamentos"):
     recomendados, tabla_efectos_secundarios = recomendar_medicamentos(df, condition, age_range, sex)
 
     st.markdown("## 💊 Recomendaciones de Medicamentos")
-    st.markdown(recomendados.to_html(escape=False, index=False), unsafe_allow_html=True)
+    st.markdown(recomendados.to_html(escape=False, st.markdown(recomendados.to_html(escape=False, index=False), unsafe_allow_html=True)
 
     st.markdown("## 📊 Tabla de Recomendaciones con Efectos Secundarios")
 
@@ -129,4 +129,12 @@ if st.button("🔍 Recomendar Medicamentos"):
 
     # Permitir al usuario modificar el orden de las columnas
     reordered_columns = st.selectbox("Seleccione el orden de las columnas", options=tabla_efectos_secundarios.columns.tolist(), index=0)
-   
+
+    # Ajustar el orden de las columnas según la selección del usuario
+    tabla_efectos_secundarios = tabla_efectos_secundarios[[reordered_columns] + [col for col in tabla_efectos_secundarios.columns if col != reordered_columns]]
+
+    # Centralizar los títulos de las columnas
+    tabla_efectos_secundarios.columns = [f'<center>{col}</center>' for col in tabla_efectos_secundarios.columns]
+
+    # Mostrar la tabla
+    st.dataframe(tabla_efectos_secundarios, height=500)
