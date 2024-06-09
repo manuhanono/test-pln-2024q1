@@ -78,7 +78,7 @@ def recomendar_medicamentos(df, condition, age_range, sex):
 
         # Convertir porcentajes a cadena con formato
         drug_row = pd.Series([drug_name] + [f"{round(value, 1)}% ({value})" for value in drug_side_effects.tolist()], index=['Drug'] + efectos_secundarios_indices)
-        result_list.append(drug_row)
+
 
     result_df = pd.DataFrame(result_list)
 
