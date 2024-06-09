@@ -50,6 +50,7 @@ def recomendar_medicamentos(df, condition, age_range, sex):
     result_list = []
     efectos_secundarios_indices = efectos_secundarios.index.tolist()
 
+    # Iterar sobre las filas de recomendados
     for _, row in recomendados.iterrows():
         drug_name = row['Drug']
         drug_data = df_filtrado[df_filtrado['Drug'] == drug_name].iloc[:, 15:]
@@ -64,11 +65,12 @@ def recomendar_medicamentos(df, condition, age_range, sex):
         drug_side_effects = drug_side_effects.drop(columns=['sentiment_score'], errors='ignore')
 
         # Convertir porcentajes a cadena con formato
-        drug_row = pd.Series([drug_name] + [f"{round(value, 1)}%" for value in drug_side_effects.tolist()], index=['Drug'] + drug_side_effects.columns.tolist())
+        drug_row = pd.Series([drug_name] + [f"{round(value, 1)}%" for value in drug_side_effects.values[0]], index=['Drug'] + drug_side_effects.columns.tolist())
         result_list.append(drug_row)
 
     # Crear DataFrame con las recomendaciones de medicamentos y efectos secundarios
     result_df = pd.DataFrame(result_list)
+
 
     return recomendados, result_df
 
