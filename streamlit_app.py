@@ -117,7 +117,7 @@ if st.button("🔍 Recomendar Medicamentos"):
     recomendados, tabla_efectos_secundarios = recomendar_medicamentos(df, condition, age_range, sex)
 
     st.markdown("## 💊 Recomendaciones de Medicamentos")
-    st.markdown(recomendados.to_html(escape=False, st.markdown(recomendados.to_html(escape=False, index=False), unsafe_allow_html=True)
+    st.markdown(recomendados.to_html(escape=False, index=False), unsafe_allow_html=True)
 
     st.markdown("## 📊 Tabla de Recomendaciones con Efectos Secundarios")
 
