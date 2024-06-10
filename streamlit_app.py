@@ -26,7 +26,7 @@ def agregar_datos(df_filtrado):
     }).reset_index()
 
     total_count = len(df_filtrado)
-    side_effects_percentage = (df_filtrado.iloc[:, 16:].apply(pd.to_numeric, errors='coerce').gt(0).sum() / total_count * 100).sort_values(ascending=False).head(20)
+    side_effects_percentage = (df_filtrado.iloc[:, 15:].apply(pd.to_numeric, errors='coerce').gt(0).sum() / total_count * 100).sort_values(ascending=False).head(20)
 
     return agregados, side_effects_percentage
 
