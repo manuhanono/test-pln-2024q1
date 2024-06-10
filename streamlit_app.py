@@ -98,7 +98,6 @@ filtered_df = filtered_df[filtered_df['Sex'] == sex]
 
 st.markdown("### Seleccione su Rango de Edad")
 
-# Reemplazar el carácter '-' por 'to' en los rangos de edad
 filtered_df['Age'] = filtered_df['Age'].astype(str).dropna().replace('-', ' to ')
 filtered_df['Age'] = filtered_df['Age'].astype(str).str.replace('Mar', '3').str.replace('Jul', '7').dropna()
 
@@ -110,6 +109,7 @@ age_range = st.selectbox("Seleccione el rango de edad", options=age_range_option
 if st.button("🔍 Recomendar Medicamentos"):
     recomendados, tabla_efectos_secundarios = recomendar_medicamentos(df, condition, age_range, sex)
 
+    tabla_efectos_secundarios.drop(columns=['Predicted'], inplace=True)
     st.markdown("## 💊 Recomendaciones de Medicamentos")
     st.markdown(recomendados.to_html(escape=False, index=False), unsafe_allow_html=True)
 
