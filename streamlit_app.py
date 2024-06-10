@@ -96,7 +96,7 @@ sex = st.selectbox("Seleccione el sexo", options=sex_options)
 # Filtrar DataFrame basado en la condición y el sexo seleccionados
 filtered_df = filtered_df[filtered_df['Sex'] == sex]
 
-st.markdown("### Seleccione su Rango de Edad")
+st.markdown("### 🎂 Seleccione su Rango de Edad")
 
 filtered_df['Age'] = filtered_df['Age'].astype(str).dropna().replace('-', ' to ')
 filtered_df['Age'] = filtered_df['Age'].astype(str).str.replace('Mar', '3').str.replace('Jul', '7').dropna()
