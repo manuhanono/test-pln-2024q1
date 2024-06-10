@@ -110,7 +110,7 @@ if st.button("🔍 Recomendar Medicamentos"):
     recomendados, tabla_efectos_secundarios = recomendar_medicamentos(df, condition, age_range, sex)
 
     tabla_efectos_secundarios.drop(columns=['Predicted', 'sentiment_score', 'num_tokens'], inplace=True)
-    tabla_efectos_secundarios = tabla_efectos_secundarios.loc[:, ~tabla_efectos_secundarios.T.duplicated()]
+    tabla_efectos_secundarios = tabla_efectos_secundarios.loc[:, ~tabla_efectos_secundarios.T.apply(tuple).duplicated()] 
     st.markdown("## 💊 Recomendaciones de Medicamentos")
     st.markdown(recomendados.to_html(escape=False, index=False), unsafe_allow_html=True)
 
